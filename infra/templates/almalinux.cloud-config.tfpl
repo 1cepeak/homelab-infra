@@ -1,0 +1,21 @@
+#cloud-config
+hostname: ${hostname}
+chpasswd:
+  expire: false
+users:
+  - name: root
+    passwd: ${password}
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+disable_root: false
+ssh_pwauth: false
+package_update: true
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+  - python3.12
+  - nano
+  - wget
+runcmd:
+  - systemctl enable --now qemu-guest-agent

@@ -1,0 +1,9 @@
+PROXMOX_ENDPOINT         = "https://127.0.0.1:8006"
+PROXMOX_NODE             = "pve"
+PROXMOX_USER             = "terraform"
+PROXMOX_API_TOKEN_ID     = "your_token_id"
+PROXMOX_API_TOKEN_SECRET = "your_token_secret"
+PROXMOX_PRIVATE_KEY_PATH = "path_to_private_key"
+
+MINIO_USER       = "minio_user"
+MINIO_BUCKETS    = ["terraform"]
