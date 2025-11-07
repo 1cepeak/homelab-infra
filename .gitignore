@@ -1,0 +1,15 @@
+# Terraform
+**/.terraform
+*.tfstate
+*.tfstate.*
+*.plan
+*.tfvars
+s3-backend.config
+
+# Ansible
+vars/
+
+.DS_Store
+.history
+.vscode
+.env*
