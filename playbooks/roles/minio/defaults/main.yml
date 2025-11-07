@@ -1,0 +1,20 @@
+---
+minio_server_download_url: "https://dl.min.io/server/minio/release/linux-amd64/minio"
+minio_client_download_url: "https://dl.min.io/client/mc/release/linux-amd64/mc"
+
+minio_binaries_dir: /usr/local/bin
+minio_server_bin: "{{ minio_binaries_dir }}/minio"
+minio_client_bin: "{{ minio_binaries_dir }}/mc"
+
+minio_user: minio
+minio_group: minio
+
+minio_data_dir: /data
+minio_etc_dir: /etc/minio
+minio_cert_dir: "{{ minio_etc_dir }}/certs"
+minio_policy_dir: "{{ minio_etc_dir }}/policies"
+
+minio_buckets:
+  - terraform
+
+minio_env_file: "{{ minio_etc_dir }}/minio.env"

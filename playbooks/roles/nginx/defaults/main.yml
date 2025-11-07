@@ -1,0 +1,4 @@
+---
+nginx_domain: 1cepeak-shelter.ru
+nginx_ssl_dir: /etc/nginx/ssl
+nginx_html_dir: /var/www/html

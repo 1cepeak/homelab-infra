@@ -1,0 +1,26 @@
+server {
+  listen 80;
+
+  server_name {{ nginx_domain }} www.{{ nginx_domain }};
+
+  # Redirect all HTTP connections to HTTPS
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl;
+
+  ssl_certificate {{ nginx_ssl_dir }}/nginx-selfsigned.crt;
+  ssl_certificate_key {{ nginx_ssl_dir }}/nginx-selfsigned.key;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  ssl_ciphers HIGH:!aNULL:!MD5;
+
+  server_name {{ nginx_domain }};
+
+  root /var/www/{{ nginx_domain }}/html;
+  index index.html;
+
+  location / {
+    try_files \$uri \$uri/ =404;
+  }
+}

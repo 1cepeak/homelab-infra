@@ -1,0 +1,96 @@
+---
+# Linux user
+- name: Create group
+  group:
+    name: "{{ minio_group }}"
+    state: present
+
+- name: Create user
+  user:
+    name: "{{ minio_user }}"
+    group: "{{ minio_group }}"
+    system: yes
+    shell: /bin/nologin
+    state: present
+
+# Directories
+- name: Create config directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ minio_user }}"
+    group: "{{ minio_group }}"
+    mode: 0750
+  with_items:
+    - "{{ minio_etc_dir }}"
+    - "{{ minio_cert_dir }}"
+    - "{{ minio_policy_dir }}"
+
+- name: Create storage directory
+  file:
+    path: "{{ minio_data_dir }}"
+    state: directory
+    owner: "{{ minio_user }}"
+    group: "{{ minio_group }}"
+    mode: 0750
+
+# Server
+- name: Download server
+  get_url:
+    url: "{{ minio_server_download_url }}"
+    dest: "{{ minio_binaries_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+  register: _download_server
+  until: _download_server is succeeded
+  retries: 5
+  delay: 2
+  notify:
+    - Restart minio
+
+- name: Generate server envfile
+  template:
+    src: minio.env.j2
+    dest: "{{ minio_env_file }}"
+    owner: "{{ minio_user }}"
+    group: "{{ minio_group }}"
+    mode: 0640
+  notify:
+    - Restart minio
+
+- name: Create service file
+  template:
+    src: minio.service.j2
+    dest: /etc/systemd/system/minio.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart minio
+
+- name: Ensure is started at boot
+  service:
+    name: minio
+    state: started
+    enabled: true
+
+# Client
+- name: Download client
+  get_url:
+    url: "{{ minio_client_download_url }}"
+    dest: "{{ minio_binaries_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+  register: _download_client
+  until: _download_client is succeeded
+  retries: 5
+  delay: 2
+
+- name: Create connection alias
+  command: "{{ minio_client_bin }} alias set local http://127.0.0.1:9000 {{ minio_root_user }} {{ minio_root_password }}"
+  run_once: true
+
+- include_tasks: create-buckets.yml
+  when: create_buckets is defined

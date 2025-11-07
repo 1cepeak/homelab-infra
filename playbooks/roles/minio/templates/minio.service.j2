@@ -1,0 +1,14 @@
+[Unit]
+Description=MinIO
+After=network.target
+
+[Service]
+User={{ minio_user }}
+Group={{ minio_group }}
+EnvironmentFile={{ minio_env_file }}
+ExecStart={{ minio_server_bin }} server {{ minio_data_dir }} --console-address ":9001"
+Restart=always
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

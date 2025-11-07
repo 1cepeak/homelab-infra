@@ -1,0 +1,4 @@
+---
+- name: Create buckets
+  command: "{{ minio_client_bin }} mb local/{{ item }}"
+  with_items: "{{ minio_buckets }}"
