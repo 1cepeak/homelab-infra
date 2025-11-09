@@ -37,7 +37,6 @@ variable "PROXMOX_PRIVATE_KEY_PATH" {
 }
 
 # Minio
-
 variable "MINIO_USER" {
   type        = string
   description = "MinIO root user"

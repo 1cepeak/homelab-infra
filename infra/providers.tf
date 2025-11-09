@@ -21,6 +21,11 @@ terraform {
       source  = "hashicorp/local"
       version = "~> 2.5.3"
     }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.1.0"
+    }
   }
 
   # backend "s3" {
@@ -54,3 +59,5 @@ provider "random" {}
 provider "null" {}
 
 provider "local" {}
+
+provider "tls" {}
